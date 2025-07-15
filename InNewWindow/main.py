@@ -3,125 +3,71 @@ import tkinter as tk
 current_input = ''
 total = 0
 
-def press_one():
+def add_to_input(digit):
     global current_input
-    current_input += '1'
+    current_input += digit
     update_display(current_input)
 
-def press_two():
-    global current_input
-    current_input += '2'
-    update_display(current_input)
-
-def press_three():
-    global current_input
-    current_input += '3'
-    update_display(current_input)
-
-def press_four():
-    global current_input
-    current_input += '4'
-    update_display(current_input)
-
-def press_five():
-    global current_input
-    current_input += '5'
-    update_display(current_input)
-
-def press_six():
-    global current_input
-    current_input += '6'
-    update_display(current_input)
-
-def press_seven():
-    global current_input
-    current_input += '7'
-    update_display(current_input)
-
-def press_eight():
-    global current_input
-    current_input += '8'
-    update_display(current_input)
-
-def press_nine():
-    global current_input
-    current_input += '9'
-    update_display(current_input)
-
-def press_zero():
-    global current_input
-    current_input += '0'
-    update_display(current_input)
-
-def press_plus():
+def operate(op):
     global total, current_input
     if current_input:
-        total += int(current_input)
-        current_input = ''
-        update_display(str(total))
-    
-def press_minus():
-    global total, current_input
-    if current_input:
-        total -= int(current_input)
-        current_input = ''
-        update_display(str(total))
-
-def press_times():
-    global total, current_input
-    if current_input:
-        total *= int(current_input)
-        current_input = ''
-        update_display(str(total))
-
-def press_divide():
-    global total, current_input
-    if current_input:
-        total /= int(current_input)
+        match op:
+            case '+':
+                total += int(current_input)
+            case '-':
+                total -= int(current_input)
+            case '*':
+                total *= int(current_input)
+            case '/':
+                total /= int(current_input)
         current_input = ''
         update_display(str(total))
 
 def update_display(value):
     greeting_label.config(text=value)
 
+def clear():
+    global total
+    total = 0
+    update_display('0')
+
 window = tk.Tk()
-window.geometry("400x500")
+window.geometry("320x500")
 window.title("Calculator")
+window.config(background="#BFFF9A")
 
-icon = tk.PhotoImage(file='logo.png')
-window.iconphoto(True, icon)
-window.config(background="#C9FFFC")
+try:
+    icon = tk.PhotoImage(file='logo.png')
+    window.iconphoto(True, icon)
+except:
+    pass
 
-greeting_label = tk.Label(window, text="", font=("Arial", 14), background="#6cbef9")
-greeting_label.pack(pady=10)
+greeting_label = tk.Label(window, text="", font=("Arial", 14), bg="#ffffff", anchor='e')
+greeting_label.grid(row=0, column=0, columnspan=4, pady=20, padx=10, sticky='we')
 
-button_one = tk.Button(window, text='1', command=press_one)
-button_one.pack()
-button_one = tk.Button(window, text='2', command=press_two)
-button_one.pack()
-button_one = tk.Button(window, text='3', command=press_three)
-button_one.pack()
-button_one = tk.Button(window, text='4', command=press_four)
-button_one.pack()
-button_one = tk.Button(window, text='5', command=press_five)
-button_one.pack()
-button_one = tk.Button(window, text='6', command=press_six)
-button_one.pack()
-button_one = tk.Button(window, text='7', command=press_seven)
-button_one.pack()
-button_one = tk.Button(window, text='8', command=press_eight)
-button_one.pack()
-button_one = tk.Button(window, text='9', command=press_nine)
-button_one.pack()
-button_one = tk.Button(window, text='0', command=press_zero)
-button_one.pack()
-button_plus = tk.Button(window, text='+', command=press_plus)
-button_plus.pack()
-button_plus = tk.Button(window, text='-', command=press_minus)
-button_plus.pack()
-button_plus = tk.Button(window, text='x', command=press_times)
-button_plus.pack()
-button_plus = tk.Button(window, text='/', command=press_divide)
-button_plus.pack()
+frame = tk.Frame(window, background="#999999")
+frame.grid(row=1, column=0, columnspan=4, pady=20, padx=10,)
+
+buttons = [
+    ('7',1,0),('8',1,1),('9',1,2),('+',1,3),
+    ('4',2,0),('5',2,1),('6',2,2),('-',2,3),
+    ('1',3,0),('2',3,1),('3',3,2),('*',3,3),
+    ('0',4,0),('C',4,1),('=',4,2),('/',4,3)
+]
+
+for text,row,column in buttons:
+    if text.isdigit():
+        action = lambda t=text: add_to_input(t)
+    elif text == '=':
+        action = lambda: update_display(str(total))
+    elif text == 'C':
+        action = clear
+    else:
+        action = lambda t=text: operate(t)
+
+    tk.Button(frame, text=text, width=5, height=3, font=('Arial', 14), command=action)\
+        .grid(row=row, column=column, padx=5, pady=5)
+
+update_display('0')
 
 window.mainloop()
