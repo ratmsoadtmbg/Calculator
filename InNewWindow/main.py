@@ -34,7 +34,7 @@ def clear():
 window = tk.Tk()
 window.geometry("320x500")
 window.title("Calculator")
-window.config(background="#BFFF9A")
+window.config(background="#66944C")
 
 try:
     icon = tk.PhotoImage(file='logo.png')
@@ -45,7 +45,7 @@ except:
 greeting_label = tk.Label(window, text="", font=("Arial", 14), bg="#ffffff", anchor='e')
 greeting_label.grid(row=0, column=0, columnspan=4, pady=20, padx=10, sticky='we')
 
-frame = tk.Frame(window, background="#999999")
+frame = tk.Frame(window, background="#676666")
 frame.grid(row=1, column=0, columnspan=4, pady=20, padx=10,)
 
 buttons = [
